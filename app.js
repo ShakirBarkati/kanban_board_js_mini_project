@@ -35,7 +35,7 @@ function addEventsOnCol(col) {
       e.preventDefault();
       e.target.classList.remove("hover-over");
       isInside = false;
-      // console.log("droped element", dragElement, col);
+      
       col.appendChild(dragElement);
       dragElement = null;
     });

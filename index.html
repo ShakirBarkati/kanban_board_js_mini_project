@@ -13,7 +13,7 @@
           <h1>Kanban Board</h1>
         </div>
         <div class="right">
-          <button>Add New Task</button>
+          <button id="open-modal">Add New Task</button>
         </div>
       </nav>
       <section id="board">
@@ -50,7 +50,6 @@
               <button class="delete-btn operation-btn">Delete</button>
             </div>
           </div>
-         
         </div>
         <div class="task-col" id="progress">
           <div class="heading">
@@ -74,6 +73,27 @@
         </div>
       </section>
     </main>
+    <!-- Modal -->
+    <div class="modal add-task-modal">
+      <div class="bg"></div>
+      <form action="">
+        <input
+          type="text"
+          placeholder="Task Title..."
+          class="modal-title modal-input"
+        />
+        <textarea
+          name="des_modal"
+          id="des-modal"
+          class="modal-description modal-input"
+          placeholder="Description..."
+        ></textarea>
+        <div class="modal-btn-container">
+          <button class="modal-btn" id="add-new-task">Add Task</button>
+          <button class="modal-btn" id="close-modal">Close</button>
+        </div>
+      </form>
+    </div>
     <script src="app.js"></script>
   </body>
 </html>
