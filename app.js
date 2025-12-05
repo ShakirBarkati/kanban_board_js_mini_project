@@ -49,14 +49,63 @@ addEventsOnCol(doneEl);
 // modal open
 let openModalId = document.getElementById("open-modal");
 let modalEl = document.getElementById("modal-el");
+let bgEl = document.querySelector(".bg");
 let closeModal = document.getElementById("close-modal");
 
 openModalId.addEventListener("click", (e) => {
   e.preventDefault();
-  modalEl.classList.add("active");
-});
 
-closeModal.addEventListener("click", (e) => {
+  modalEl.classList.add("active");
+  modalTitleInput.focus();
+});
+function removeModal(e) {
   e.preventDefault();
   modalEl.classList.remove("active");
+}
+closeModal.addEventListener("click", removeModal);
+bgEl.addEventListener("click", removeModal);
+
+// add new task
+let addNewTaskBtn = document.getElementById("add-new-task");
+let modalTitleInput = document.getElementById("modal-title");
+let modalDescriptionMsg = document.getElementById("modal-description");
+
+modalTitleInput.addEventListener("keypress", addModalBtnClick);
+modalDescriptionMsg.addEventListener("keypress", addModalBtnClick);
+function addModalBtnClick(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    addNewTaskBtn.click();
+  }
+}
+
+function modalEmpty(e) {
+  modalTitleInput.value = " ";
+  modalDescriptionMsg.value = " ";
+}
+
+addNewTaskBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  let modalTitleInputVal = modalTitleInput.value;
+  let modalDescriptionMsgVal = modalDescriptionMsg.value;
+  let div = document.createElement("div");
+  div.classList.add("task");
+  div.setAttribute("draggable", "true");
+  div.innerHTML = `
+            <h3>${
+              modalTitleInputVal ? modalTitleInputVal : "Title is not available"
+            }</h3>
+            <p>${
+              modalDescriptionMsgVal
+                ? modalDescriptionMsgVal
+                : "Description is not available"
+            }</p>
+            <div class="operation-btn-container">
+              <button class="edit-btn operation-btn">Edit</button>
+              <button class="delete-btn operation-btn">Delete</button>
+            </div>
+`;
+  todoEl.appendChild(div);
+  removeModal(e);
+  modalEmpty();
 });
