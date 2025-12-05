@@ -106,6 +106,10 @@ addNewTaskBtn.addEventListener("click", (e) => {
             </div>
 `;
   todoEl.appendChild(div);
+  div.addEventListener("drag", (e) => {
+    e.preventDefault();
+    dragElement = div;
+  });
   removeModal(e);
   modalEmpty();
 });
