@@ -35,7 +35,7 @@ function addEventsOnCol(col) {
       e.preventDefault();
       e.target.classList.remove("hover-over");
       isInside = false;
-      
+
       col.appendChild(dragElement);
       dragElement = null;
     });
@@ -45,3 +45,18 @@ function addEventsOnCol(col) {
 addEventsOnCol(todoEl);
 addEventsOnCol(progressEl);
 addEventsOnCol(doneEl);
+
+// modal open
+let openModalId = document.getElementById("open-modal");
+let modalEl = document.getElementById("modal-el");
+let closeModal = document.getElementById("close-modal");
+
+openModalId.addEventListener("click", (e) => {
+  e.preventDefault();
+  modalEl.classList.add("active");
+});
+
+closeModal.addEventListener("click", (e) => {
+  e.preventDefault();
+  modalEl.classList.remove("active");
+});
