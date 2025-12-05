@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <nav>
+        <div class="left">
+          <h1>Kanban Board</h1>
+        </div>
+        <div class="right">
+          <button>Add New Task</button>
+        </div>
+      </nav>
+      <section id="board">
+        <div class="task-col" id="todo">
+          <div class="heading">
+            <div class="left">
+              <h2>To Do</h2>
+            </div>
+            <div class="right">
+              <span class="count">0</span>
+            </div>
+          </div>
+          <div draggable="true" class="task">
+            <h3>Task</h3>
+            <p>Description</p>
+            <div class="operation-btn-container">
+              <button class="edit-btn operation-btn">Edit</button>
+              <button class="delete-btn operation-btn">Delete</button>
+            </div>
+          </div>
+          <div draggable="true" class="task">
+            <h3>Task</h3>
+            <p>Description</p>
+            <div class="operation-btn-container">
+              <button class="edit-btn operation-btn">Edit</button>
+              <button class="delete-btn operation-btn">Delete</button>
+            </div>
+          </div>
+          <div draggable="true" class="task">
+            <h3>Task</h3>
+            <p>Description</p>
+            <div class="operation-btn-container">
+              <button class="edit-btn operation-btn">Edit</button>
+              <button class="delete-btn operation-btn">Delete</button>
+            </div>
+          </div>
+         
+        </div>
+        <div class="task-col" id="progress">
+          <div class="heading">
+            <div class="left">
+              <h2>In progress</h2>
+            </div>
+            <div class="right">
+              <span class="count">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="task-col" id="done">
+          <div class="heading">
+            <div class="left">
+              <h2>Done</h2>
+            </div>
+            <div class="right">
+              <span class="count">0</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
