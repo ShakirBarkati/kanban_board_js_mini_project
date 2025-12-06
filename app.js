@@ -1,8 +1,10 @@
-const todoEl = document.getElementById("todo");
-const progressEl = document.getElementById("progress");
-const doneEl = document.getElementById("done");
+const todoEl = document.querySelector("#todo");
+const progressEl = document.querySelector("#progress");
+const doneEl = document.querySelector("#done");
 const tasksEl = document.querySelectorAll(".task");
+
 let dragElement = null;
+let columns = [todoEl, progressEl, doneEl];
 
 tasksEl.forEach((task) => {
   task.addEventListener("drag", (e) => {
@@ -35,16 +37,18 @@ function addEventsOnCol(col) {
       e.preventDefault();
       e.target.classList.remove("hover-over");
       isInside = false;
-
       col.appendChild(dragElement);
-      dragElement = null;
+      // dragElement = null;
+      // Drop tasks count and show
+      columns.forEach((col) => {
+        let tasks = col.querySelectorAll(".task");
+        let countEl = col.querySelector(".count");
+        let countNum = tasks.length;
+        countEl.innerText = countNum;
+      });
     });
   }
 }
-
-addEventsOnCol(todoEl);
-addEventsOnCol(progressEl);
-addEventsOnCol(doneEl);
 
 // modal open
 let openModalId = document.getElementById("open-modal");
@@ -110,6 +114,18 @@ addNewTaskBtn.addEventListener("click", (e) => {
     e.preventDefault();
     dragElement = div;
   });
+
   removeModal(e);
   modalEmpty();
+  // Drop tasks count and show
+  columns.forEach((col) => {
+    let tasks = col.querySelectorAll(".task");
+    let countEl = col.querySelector(".count");
+    let countNum = tasks.length;
+    countEl.innerText = countNum;
+  });
 });
+
+addEventsOnCol(todoEl);
+addEventsOnCol(progressEl);
+addEventsOnCol(doneEl);
