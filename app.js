@@ -13,18 +13,9 @@ if (JSON.parse(localStorage.getItem("tasks"))) {
   for (let col in localStorageData) {
     let colSelect = document.querySelector(`#${col}`);
     localStorageData[col].forEach((task) => {
-      let taskReturn = genrateTask(task.title, task.description, colSelect);
+      genrateTask(task.title, task.description, colSelect);
       // Drop tasks count and show
-      columns.forEach((col) => {
-        let tasks = col.querySelectorAll(".task");
-        let countEl = col.querySelector(".count");
-        let countNum = tasks.length;
-        countEl.innerText = countNum;
-      });
-      taskReturn.addEventListener("drag", (e) => {
-        e.preventDefault();
-        dragElement = taskReturn;
-      });
+      renderCount(columns);
     });
   }
 } else {
@@ -45,9 +36,31 @@ function genrateTask(title, desc, col) {
             </div>
 `;
   col.appendChild(div);
+  div.addEventListener("drag", (e) => {
+    e.preventDefault();
+    dragElement = div;
+  });
   return div;
 }
 
+// show count function
+function renderCount(columns) {
+  columns.forEach((col) => {
+    let tasks = col.querySelectorAll(".task");
+    let countEl = col.querySelector(".count");
+    let countNum = tasks.length;
+    countEl.innerText = countNum;
+
+    // insert in taskObj
+    taskObj[col.id] = Array.from(tasks).map((t) => {
+      return {
+        title: t.querySelector("h3").innerHTML,
+        description: t.querySelector("p").innerHTML,
+      };
+    });
+    localStorage.setItem("tasks", JSON.stringify(taskObj));
+  });
+}
 tasksEl.forEach((task) => {
   task.addEventListener("drag", (e) => {
     e.preventDefault();
@@ -89,23 +102,7 @@ function addEventsOnCol(col) {
         countEl.innerText = countNum;
       });
 
-      // Drop tasks count and show
-      columns.forEach((col) => {
-        let tasks = col.querySelectorAll(".task");
-        let countEl = col.querySelector(".count");
-        let countNum = tasks.length;
-        countEl.innerText = countNum;
-        // insert in taskObj
-        taskObj[col.id] = Array.from(tasks).map((t) => {
-          return {
-            title: t.querySelector("h3").innerHTML,
-            description: t.querySelector("p").innerHTML,
-          };
-        });
-
-        localStorage.setItem("tasks", JSON.stringify(taskObj));
-        console.log(taskObj);
-      });
+      renderCount(columns);
     });
   }
 }
@@ -153,31 +150,13 @@ addNewTaskBtn.addEventListener("click", (e) => {
   let modalTitleInputVal = modalTitleInput.value;
   let modalDescriptionMsgVal = modalDescriptionMsg.value;
 
-  let task = genrateTask(modalTitleInputVal, modalDescriptionMsgVal, todoEl);
-  // console.log(div);
-  task.addEventListener("drag", (e) => {
-    e.preventDefault();
-    dragElement = task;
-  });
+  genrateTask(modalTitleInputVal, modalDescriptionMsgVal, todoEl);
 
   removeModal(e);
   modalEmpty();
 
   // Drop tasks count and show
-  columns.forEach((col) => {
-    let tasks = col.querySelectorAll(".task");
-    let countEl = col.querySelector(".count");
-    let countNum = tasks.length;
-    countEl.innerText = countNum;
-    // insert in taskObj
-    taskObj[col.id] = Array.from(tasks).map((t) => {
-      return {
-        title: t.querySelector("h3").innerHTML,
-        description: t.querySelector("p").innerHTML,
-      };
-    });
-    localStorage.setItem("tasks", JSON.stringify(taskObj));
-  });
+  renderCount(columns);
 });
 
 addEventsOnCol(todoEl);
