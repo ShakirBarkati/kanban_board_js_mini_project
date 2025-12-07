@@ -13,30 +13,39 @@ if (JSON.parse(localStorage.getItem("tasks"))) {
   for (let col in localStorageData) {
     let colSelect = document.querySelector(`#${col}`);
     localStorageData[col].forEach((task) => {
-      let div = document.createElement("div");
-      div.classList.add("task");
-      div.setAttribute("draggable", "true");
-      div.innerHTML = `
-            <h3>${task.title ? task.title : "Title is not available"}</h3>
-            <p>${
-              task.description
-                ? task.description
-                : "Description is not available"
-            }</p>
-            <div class="operation-btn-container">
-              <button class="edit-btn operation-btn">Edit</button>
-              <button class="delete-btn operation-btn">Delete</button>
-            </div>
-`;
-      colSelect.appendChild(div);
-      div.addEventListener("drag", (e) => {
+      let taskReturn = genrateTask(task.title, task.description, colSelect);
+      // Drop tasks count and show
+      columns.forEach((col) => {
+        let tasks = col.querySelectorAll(".task");
+        let countEl = col.querySelector(".count");
+        let countNum = tasks.length;
+        countEl.innerText = countNum;
+      });
+      taskReturn.addEventListener("drag", (e) => {
         e.preventDefault();
-        dragElement = div;
+        dragElement = taskReturn;
       });
     });
   }
 } else {
   console.log("local storage is empty");
+}
+
+// add task and show in document
+function genrateTask(title, desc, col) {
+  let div = document.createElement("div");
+  div.classList.add("task");
+  div.setAttribute("draggable", "true");
+  div.innerHTML = `
+            <h3>${title ? title : "Title is not available"}</h3>
+            <p>${desc ? desc : "Description is not available"}</p>
+            <div class="operation-btn-container">
+              <button class="edit-btn operation-btn">Edit</button>
+              <button class="delete-btn operation-btn">Delete</button>
+            </div>
+`;
+  col.appendChild(div);
+  return div;
 }
 
 tasksEl.forEach((task) => {
@@ -93,6 +102,7 @@ function addEventsOnCol(col) {
             description: t.querySelector("p").innerHTML,
           };
         });
+
         localStorage.setItem("tasks", JSON.stringify(taskObj));
         console.log(taskObj);
       });
@@ -142,27 +152,12 @@ addNewTaskBtn.addEventListener("click", (e) => {
   e.preventDefault();
   let modalTitleInputVal = modalTitleInput.value;
   let modalDescriptionMsgVal = modalDescriptionMsg.value;
-  let div = document.createElement("div");
-  div.classList.add("task");
-  div.setAttribute("draggable", "true");
-  div.innerHTML = `
-            <h3>${
-              modalTitleInputVal ? modalTitleInputVal : "Title is not available"
-            }</h3>
-            <p>${
-              modalDescriptionMsgVal
-                ? modalDescriptionMsgVal
-                : "Description is not available"
-            }</p>
-            <div class="operation-btn-container">
-              <button class="edit-btn operation-btn">Edit</button>
-              <button class="delete-btn operation-btn">Delete</button>
-            </div>
-`;
-  todoEl.appendChild(div);
-  div.addEventListener("drag", (e) => {
+
+  let task = genrateTask(modalTitleInputVal, modalDescriptionMsgVal, todoEl);
+  // console.log(div);
+  task.addEventListener("drag", (e) => {
     e.preventDefault();
-    dragElement = div;
+    dragElement = task;
   });
 
   removeModal(e);
@@ -182,7 +177,6 @@ addNewTaskBtn.addEventListener("click", (e) => {
       };
     });
     localStorage.setItem("tasks", JSON.stringify(taskObj));
-    console.log(taskObj);
   });
 });
 
