@@ -1,3 +1,4 @@
+let taskObj = {};
 const todoEl = document.querySelector("#todo");
 const progressEl = document.querySelector("#progress");
 const doneEl = document.querySelector("#done");
@@ -5,6 +6,38 @@ const tasksEl = document.querySelectorAll(".task");
 
 let dragElement = null;
 let columns = [todoEl, progressEl, doneEl];
+
+// get items in local storage
+if (JSON.parse(localStorage.getItem("tasks"))) {
+  let localStorageData = JSON.parse(localStorage.getItem("tasks"));
+  for (let col in localStorageData) {
+    let colSelect = document.querySelector(`#${col}`);
+    localStorageData[col].forEach((task) => {
+      let div = document.createElement("div");
+      div.classList.add("task");
+      div.setAttribute("draggable", "true");
+      div.innerHTML = `
+            <h3>${task.title ? task.title : "Title is not available"}</h3>
+            <p>${
+              task.description
+                ? task.description
+                : "Description is not available"
+            }</p>
+            <div class="operation-btn-container">
+              <button class="edit-btn operation-btn">Edit</button>
+              <button class="delete-btn operation-btn">Delete</button>
+            </div>
+`;
+      colSelect.appendChild(div);
+      div.addEventListener("drag", (e) => {
+        e.preventDefault();
+        dragElement = div;
+      });
+    });
+  }
+} else {
+  console.log("local storage is empty");
+}
 
 tasksEl.forEach((task) => {
   task.addEventListener("drag", (e) => {
@@ -45,6 +78,23 @@ function addEventsOnCol(col) {
         let countEl = col.querySelector(".count");
         let countNum = tasks.length;
         countEl.innerText = countNum;
+      });
+
+      // Drop tasks count and show
+      columns.forEach((col) => {
+        let tasks = col.querySelectorAll(".task");
+        let countEl = col.querySelector(".count");
+        let countNum = tasks.length;
+        countEl.innerText = countNum;
+        // insert in taskObj
+        taskObj[col.id] = Array.from(tasks).map((t) => {
+          return {
+            title: t.querySelector("h3").innerHTML,
+            description: t.querySelector("p").innerHTML,
+          };
+        });
+        localStorage.setItem("tasks", JSON.stringify(taskObj));
+        console.log(taskObj);
       });
     });
   }
@@ -117,12 +167,22 @@ addNewTaskBtn.addEventListener("click", (e) => {
 
   removeModal(e);
   modalEmpty();
+
   // Drop tasks count and show
   columns.forEach((col) => {
     let tasks = col.querySelectorAll(".task");
     let countEl = col.querySelector(".count");
     let countNum = tasks.length;
     countEl.innerText = countNum;
+    // insert in taskObj
+    taskObj[col.id] = Array.from(tasks).map((t) => {
+      return {
+        title: t.querySelector("h3").innerHTML,
+        description: t.querySelector("p").innerHTML,
+      };
+    });
+    localStorage.setItem("tasks", JSON.stringify(taskObj));
+    console.log(taskObj);
   });
 });
 
